@@ -1,9 +1,15 @@
 <template>
-  <div class="container mx-auto p-4">
-    <h1 class="text-center text-4xl font-bold mb-8">SpaceX Lancements</h1>
-    <NextLaunch />
+  <div class="bg-black min-h-screen">
+    <div class="container mx-auto p-4">
+      <div class="flex justify-center mb-8">
+        <img src="/src/assets/SpaceX.svg" alt="SpaceX Logo" class="w-64 h-10" />
+      </div>
+      <NextLaunch />
+    </div>
   </div>
 </template>
+
+
 
 <script lang="ts">
 import { defineComponent } from 'vue';

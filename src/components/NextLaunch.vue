@@ -1,13 +1,19 @@
 <template>
-    <section class="next-launch p-4 bg-gray-100 rounded-lg mb-8">
-      <h2 class="text-2xl font-bold mb-2">Prochain lancement</h2>
-      <div v-if="nextLaunch">
-        <p class="text-xl">{{ nextLaunch.name }}</p>
-        <p>{{ formattedDate }}</p>
-        <p class="text-lg">{{ countdown }}</p>
+    <section
+      class="next-launch relative p-4 rounded-lg mb-8"
+      style="background-image: url('src/assets/ussf.jpg'); background-size: cover; background-position: center;">
+      <div class="absolute inset-0 bg-black opacity-20 rounded-lg"></div>
+      <div class="relative z-10">
+        <h2 class="text-2xl font-bold mb-2 text-white text-center">Prochain lancement</h2>
+        <div v-if="nextLaunch">
+          <p class="text-xl text-white text-center">{{ nextLaunch.name }}</p>
+          <p class="text-white text-center">{{ formattedDate }}</p>
+          <p class="text-lg text-white text-center">{{ countdown }}</p>
+        </div>
       </div>
     </section>
   </template>
+  
   
   <script lang="ts">
   import { defineComponent, ref, computed, onMounted } from 'vue';
