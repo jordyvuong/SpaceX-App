@@ -1,5 +1,9 @@
 <template>
-  <div v-if="launch" class="fixed inset-0 flex justify-center items-center z-50">
+  <div 
+  v-if="launch" 
+  class="fixed inset-0 flex justify-center items-center z-50"
+  @click.self="closeModal"
+  >
     <div class="absolute inset-0 bg-opacity-20 pointer-events-none"></div>
     <div class="relative bg-white bg-opacity-90 p-6 rounded-lg w-11/12 max-w-2xl">
       <button @click="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800">X</button>
