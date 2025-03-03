@@ -1,11 +1,12 @@
 <template>
   <div class="mt-4 flex justify-center">
-    <nav class="p-2 rounded shadow">
+    <nav class="p-2">
       <button
         v-for="filter in filters"
         :key="filter.value"
         @click="onChangeFilter(filter.value)"
-        :class="['px-4 py-2 mx-1 rounded', { 'bg-blue-500 text-white': selectedFilter === filter.value, 'bg-gray-200': selectedFilter !== filter.value }]"
+        class="mx-2 relative focus:outline-none text-white button-underline"
+        :class="selectedFilter === filter.value ? 'text-blue-400 font-semibold' : 'text-gray-300 hover:text-blue-300'"
       >
         {{ filter.label }}
       </button>
@@ -39,11 +40,25 @@ export default defineComponent({
 </script>
 
 <style scoped>
-button {
-  transition: background-color 0.3s, color 0.3s;
+
+.button-underline {
+  padding: 0.5rem 0;
+  border: none;
+  background: none;
 }
-button:hover {
-  background-color: #3b82f6; /* Couleur de survol */
-  color: white;
+
+.button-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: currentColor;
+  transition: width 0.3s;
+}
+
+.button-underline:hover::after {
+  width: 100%;
 }
 </style>
