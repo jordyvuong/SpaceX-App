@@ -2,7 +2,7 @@
     <section
       class="next-launch relative p-4 rounded-lg mb-8"
       style="background-image: url('src/assets/ussf.jpg'); background-size: cover; background-position: center;">
-      <div class="absolute inset-0 bg-black opacity-20 rounded-lg"></div>
+      <div class="absolute inset-0 bg-black opacity-30 rounded-lg"></div>
       <div class="relative z-10">
         <h2 class="text-2xl font-bold mb-2 text-white text-center">Prochain lancement</h2>
         <div v-if="nextLaunch">
@@ -27,7 +27,7 @@
   
       const fetchNextLaunch = async () => {
         try {
-          const { data } = await axios.get('https://api.spacexdata.com/v5/launches/next');
+          const { data } = await axios.get('https://api.spacexdata.com/v5/launches/next'); //Vérifier le lien d'API, next launch 2022 ?
           nextLaunch.value = data;
           updateCountdown();
         } catch (error) {
@@ -50,9 +50,9 @@
           countdown.value = "Lancé";
           return;
         }
-        const seconds = Math.floor(diff / 1000) % 60;
+        const seconds = Math.floor(diff / 1000) % 60; 
         const minutes = Math.floor(diff / (1000 * 60)) % 60;
-        const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+        const hours = Math.floor(diff / (1000 * 60 * 60)) % 24; //Afficher selon le format horaire
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         countdown.value = `${days}j ${hours}h ${minutes}m ${seconds}s`;
       };
