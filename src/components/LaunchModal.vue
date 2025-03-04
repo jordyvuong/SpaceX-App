@@ -17,7 +17,8 @@
         class="my-4 mx-auto"
       />
       <a
-        :href="launch.link && launch.links.article"
+        v-if="launch.links && launch.links.article"
+        :href="launch.links.article"
         target="_blank"
         class="text-blue-500 underline"
       >
@@ -42,7 +43,7 @@
         <p v-else>Aucune vidéo disponible.</p>
       </div>
       <div class="mt-4">
-        <p><strong>Lieu de lancement :</strong> {{ launch.launchpad }}</p>
+        <p><strong>Lieu de lancement :</strong> {{ launchpadName }}</p>
         <p><strong>Payloads :</strong> {{ payloadsNames }}</p>
         <p><strong>Clients :</strong> {{ clientsNames }}</p>
       </div>
@@ -51,7 +52,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'LaunchModal',
@@ -64,6 +66,23 @@ export default defineComponent({
   emits: ['close'],
   setup(props, { emit }) {
     const showVideo = ref(false);
+    const launchpads = ref<{ [key: string]: string }>({});
+
+    const fetchLaunchpads = async () => {
+      try {
+        const response = await axios.get('https://api.spacexdata.com/v4/launchpads');
+        const launchpadData = response.data;
+        launchpadData.forEach((launchpad: any) => {
+          launchpads.value[launchpad.id] = launchpad.name;
+        });
+      } catch (error) {
+        console.error('Erreur lors de la récupération des launchpads:', error);
+      }
+    };
+
+    onMounted(() => {
+      fetchLaunchpads();
+    });
 
     const youtubeUrl = computed(() => {
       return props.launch && props.launch.links.youtube_id
@@ -78,21 +97,29 @@ export default defineComponent({
     });
 
     const payloadsNames = computed(() => {
-      if (!props.launch || !props.launch.payloads) return '';
+      if (!props.launch || !props.launch.payloads || props.launch.payloads.length === 0) {
+        return 'Aucun payload disponible';
+      }
       return props.launch.payloads.map((p: any) => p.name).join(', ');
     });
 
     const clientsNames = computed(() => {
-      if (!props.launch || !props.launch.payloads) return '';
+      if (!props.launch || !props.launch.payloads || props.launch.payloads.length === 0) {
+        return 'Aucun client disponible';
+      }
       const customers = props.launch.payloads.flatMap((p: any) => p.customers || []);
-      return Array.from(new Set(customers)).join(', ');
+      return customers.length > 0 ? Array.from(new Set(customers)).join(', ') : 'Aucun client disponible';
+    });
+
+    const launchpadName = computed(() => {
+      return launchpads.value[props.launch.launchpad] || props.launch.launchpad;
     });
 
     const closeModal = () => {
       emit('close');
     };
 
-    return { showVideo, youtubeUrl, formattedDate, payloadsNames, clientsNames, closeModal };
+    return { showVideo, youtubeUrl, formattedDate, payloadsNames, clientsNames, launchpadName, closeModal };
   }
 });
 </script>
